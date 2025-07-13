@@ -96,20 +96,20 @@ header {
   border-color: #61A5C2;
 }
 
-.submit-btn{
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    background-color: #61A5C2;
-    color: #fff;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+.submit-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background-color: #61A5C2;
+  color: #fff;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
 .submit-btn:hover {
@@ -128,14 +128,14 @@ header {
 
 /* Estilos do mapa */
 #map {
-    margin-top: 10px;
-    height: 300px;
-  }
+  margin-top: 10px;
+  height: 300px;
+}
 
 .map-hint {
-    font-size: 0.8rem;
-    color: #666;
-    margin-top: 5px;
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 5px;
 }
 
 /* Media Queries para responsividade */
@@ -181,4 +181,39 @@ header {
   .submit-btn {
     padding: 12px;
   }
+}
+
+#map {
+  height: 300px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.map-hint {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#response {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
 }

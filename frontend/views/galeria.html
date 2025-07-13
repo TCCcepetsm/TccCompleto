@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRAVACAO - Filmagens e Transmissão de Eventos Esportivos</title>
+    <link rel="stylesheet" href="../public/css/galeria.css">
+    <script src="../public/js/config.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="inicial.html">
+                <img src="../public/images/logo.png" alt="Logo da Empresa">
+            </a>
+        </div>
+    </header>
+
+    <h1>Galeria</h1>
+
+    <!-- Filtros opcionais -->
+    <div class="filters">
+        <button class="filter-button active" onclick="filtrarPorTipo('todos')">Todos</button>
+        <button class="filter-button" onclick="filtrarPorTipo('futebol')">Futebol</button>
+        <button class="filter-button" onclick="filtrarPorTipo('tenis')">Tênis</button>
+        <button class="filter-button" onclick="filtrarPorTipo('maratona')">Maratona</button>
+        <button class="filter-button" onclick="filtrarPorTipo('outros')">Outros</button>
+    </div>
+
+    <div class="container" id="gravacao">
+        <!-- Imagens serão carregadas aqui via JavaScript -->
+    </div>
+
+    <script src="galeria.js"></script>
+</body>
+
+</html>

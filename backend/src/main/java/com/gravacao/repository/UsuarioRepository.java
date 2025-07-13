@@ -9,8 +9,25 @@ import org.springframework.data.repository.query.Param;
 import java.util.List; // Importar List
 import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+
+    boolean existsByEmail(String email);
+
+    boolean existsByCpf(String cpf);
+
+    // Consulta otimizada para trazer usuários com suas roles
+    @Query("SELECT DISTINCT u FROM Usuario u LEFT JOIN FETCH u.roles")
+    List<Usuario> findAllWithRoles();
+
+    // Alternativa com projeção específica se necessário
+    @Query("SELECT u.id, u.nome, u.email, r FROM Usuario u LEFT JOIN u.roles r")
+    List<Object[]> findAllUsuariosWithRolesProjection();
+
+    @Query("SELECT DISTINCT u FROM Usuario u LEFT JOIN FETCH u.roles")
+    List<Usuario> findAllUsuariosWithRoles();
 
     @EntityGraph(attributePaths = { "roles" })
     @Query("SELECT u FROM Usuario u WHERE lower(u.email) = lower(:email)")
@@ -37,9 +54,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByEmail(String email);
 
     // --- Métodos ausentes que precisam ser adicionados ---
-
-    @EntityGraph(attributePaths = { "roles" })
-    List<Usuario> findAllUsuariosWithRoles();
 
     @EntityGraph(attributePaths = { "roles" })
     Optional<Usuario> findByIdWithRoles(Long id);

@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
+
     private static final String ROLE_PREFIX = "ROLE_";
     private final Usuario usuario;
 
@@ -21,8 +22,7 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return usuario.getRoles().stream()
                 .map(role -> {
-                    String roleName = role.name(); // Pega o nome do enum (ex: "ADMIN", "USUARIO")
-                    // Garante que o papel tenha o prefixo ROLE_ exigido pelo Spring Security
+                    String roleName = role.name();
                     return new SimpleGrantedAuthority(
                             roleName.startsWith(ROLE_PREFIX) ? roleName : ROLE_PREFIX + roleName);
                 })
@@ -41,25 +41,21 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        // CORREÇÃO: Delega para o método isAccountNonExpired() existente em Usuario
         return usuario.isAccountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        // CORREÇÃO: Delega para o método isAccountNonLocked() existente em Usuario
         return usuario.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        // CORREÇÃO: Delega para o método isCredentialsNonExpired() existente em Usuario
         return usuario.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        // CORREÇÃO: Delega para o método isEnabled() existente em Usuario
         return usuario.isEnabled();
     }
 

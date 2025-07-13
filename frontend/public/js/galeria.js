@@ -1,27 +1,27 @@
 // Carrega as imagens do backend
 document.addEventListener('DOMContentLoaded', async () => {
     const container = document.getElementById('gravacao');
-    
+
     try {
         // Mostra indicador de carregamento
         container.innerHTML = '<div class="loading">Carregando imagens...</div>';
-        
+
         // Busca as imagens do backend usando a configuração centralizada
         const imagens = await apiRequest(API_CONFIG.ENDPOINTS.GALERIA_LISTAR);
-        
+
         // Limpa o container
         container.innerHTML = '';
-        
+
         if (!imagens || imagens.length === 0) {
             container.innerHTML = '<div class="no-images">Nenhuma imagem encontrada.</div>';
             return;
         }
-        
+
         // Cria os elementos para cada imagem
         imagens.forEach(imagem => {
             const box = document.createElement('div');
             box.className = 'box';
-            
+
             // Cria a estrutura HTML para cada imagem
             box.innerHTML = `
                 <img src="${imagem.urlGravacao}" 
@@ -39,18 +39,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                             class="btn-visualizar">
                         Ver Gravacao
                     </button>
-                    ${getUserInfo() && getUserInfo().role === 'ADMIN' ? 
-                        `<button onclick="deletarGravacao(${imagem.id})" 
+                    ${getUserInfo() && getUserInfo().role === 'ADMIN' ?
+                    `<button onclick="deletarGravacao(${imagem.id})" 
                                  class="btn-deletar">
                             Deletar
                          </button>` : ''
-                    }
+                }
                 </div>
             `;
-            
+
             container.appendChild(box);
         });
-        
+
     } catch (error) {
         console.error('Erro ao carregar imagens:', error);
         container.innerHTML = `
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Função para formatar data
 function formatDate(dateString) {
     if (!dateString) return '';
-    
+
     try {
         const date = new Date(dateString);
         return date.toLocaleDateString('pt-BR', {
@@ -82,10 +82,10 @@ function formatDate(dateString) {
 // Função para filtrar imagens por tipo
 async function filtrarPorTipo(tipoEvento) {
     const container = document.getElementById('gravacao');
-    
+
     try {
         container.innerHTML = '<div class="loading">Filtrando imagens...</div>';
-        
+
         let imagens;
         if (!tipoEvento || tipoEvento === 'todos') {
             // Busca todas as imagens
@@ -94,18 +94,18 @@ async function filtrarPorTipo(tipoEvento) {
             // Busca imagens por tipo
             imagens = await apiRequest(`${API_CONFIG.ENDPOINTS.GALERIA_POR_TIPO}/${encodeURIComponent(tipoEvento)}`);
         }
-        
+
         container.innerHTML = '';
-        
+
         if (!imagens || imagens.length === 0) {
             container.innerHTML = `<div class="no-images">Nenhuma imagem encontrada${tipoEvento && tipoEvento !== 'todos' ? ` para "${tipoEvento}"` : ''}.</div>`;
             return;
         }
-        
+
         imagens.forEach(imagem => {
             const box = document.createElement('div');
             box.className = 'box';
-            
+
             box.innerHTML = `
                 <img src="${imagem.urlGravacao}" 
                      alt="${imagem.titulo}" 
@@ -122,18 +122,18 @@ async function filtrarPorTipo(tipoEvento) {
                             class="btn-visualizar">
                         Ver Gravacao
                     </button>
-                    ${getUserInfo() && getUserInfo().role === 'ADMIN' ? 
-                        `<button onclick="deletarGravacao(${imagem.id})" 
+                    ${getUserInfo() && getUserInfo().role === 'ADMIN' ?
+                    `<button onclick="deletarGravacao(${imagem.id})" 
                                  class="btn-deletar">
                             Deletar
                          </button>` : ''
-                    }
+                }
                 </div>
             `;
-            
+
             container.appendChild(box);
         });
-        
+
     } catch (error) {
         console.error('Erro ao filtrar imagens:', error);
         container.innerHTML = `
@@ -163,7 +163,7 @@ function visualizarGravacao(url, titulo) {
         `;
         document.body.appendChild(modal);
     }
-    
+
     // Atualiza conteúdo do modal
     document.getElementById('modalImage').src = url;
     document.getElementById('modalTitle').textContent = titulo;
@@ -183,15 +183,15 @@ async function deletarGravacao(imagemId) {
     if (!confirm('Tem certeza que deseja deletar esta imagem?')) {
         return;
     }
-    
+
     try {
         await apiRequest(`${API_CONFIG.ENDPOINTS.GALERIA_DELETAR}/${imagemId}`, {
             method: 'DELETE'
         });
-        
+
         alert('Gravacao deletada com sucesso!');
         location.reload(); // Recarrega a página para atualizar a gravacao
-        
+
     } catch (error) {
         console.error('Erro ao deletar imagem:', error);
         alert('Erro ao deletar imagem: ' + error.message);
@@ -199,10 +199,23 @@ async function deletarGravacao(imagemId) {
 }
 
 // Fechar modal ao clicar fora dele
-window.onclick = function(event) {
+window.onclick = function (event) {
     const modal = document.getElementById('imageModal');
     if (event.target === modal) {
         fecharModal();
     }
 }
 
+// Gerencia os botões de filtro
+document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-button');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove classe active de todos os botões
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Adiciona classe active ao botão clicado
+            button.classList.add('active');
+        });
+    });
+});

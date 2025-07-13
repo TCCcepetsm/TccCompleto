@@ -5,6 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
+import java.util.List; // Importar List
+
+import com.gravacao.controller.entity.Usuario;
+import com.gravacao.repository.UsuarioRepository;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 // Para usar com H2 (sem Docker) - remova @Testcontainers
@@ -19,6 +24,14 @@ class RecorderSrcApplicationTests {
     void contextLoads() {
         assertThat(context).isNotNull();
     }
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Test
+    void testFindAllUsuariosWithRoles() {
+        List<Usuario> usuarios = usuarioRepository.findAllUsuariosWithRoles();
+        assertNotNull(usuarios);
 
     @Test
     void testDatabaseConnection() {
