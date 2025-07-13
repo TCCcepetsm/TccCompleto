@@ -10,6 +10,6 @@ RUN mvn clean package -DskipTests
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-war", "target/gravacao-0.0.1-SNAPSHOT.war"]
+ENTRYPOINT ["java", "-jar", "target/gravacao-0.0.1-SNAPSHOT.war"]
 
 
