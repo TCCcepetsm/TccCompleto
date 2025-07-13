@@ -30,7 +30,7 @@ class RecorderSrcApplicationTests {
 
     @Test
     void testFindAllUsuariosWithRoles() {
-        List<Usuario> usuarios = usuarioRepository.findAllUsuariosWithRoles();
+        List<Usuario> usuarios = usuarioRepository.findAllWithRoles();
         assertNotNull(usuarios);
     }
 

@@ -69,7 +69,8 @@ public class UsuarioService {
     // ======== CRUD ========
     @Transactional(readOnly = true)
     public List<Usuario> listarTodos() {
-        return repository.findAllUsuariosWithRoles();
+        return repository.findAllWithRoles();
+
     }
 
     @Transactional(readOnly = true)

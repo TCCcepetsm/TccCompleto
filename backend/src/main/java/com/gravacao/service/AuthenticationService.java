@@ -3,7 +3,6 @@ package com.gravacao.service;
 import com.gravacao.controller.entity.Usuario;
 import com.gravacao.exception.AuthenticationException;
 import com.gravacao.repository.UsuarioRepository;
-
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,35 +19,57 @@ public class AuthenticationService {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
     private final UsuarioRepository usuarioRepository;
 
-    public Usuario getUsuarioAutenticado() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            logger.warn("Tentativa de acesso sem autenticação");
-            throw new AuthenticationException(
-                    "Acesso não autorizado",
-                    HttpStatus.UNAUTHORIZED);
-        }
-
-        String email = authentication.getName();
+    /**
+     * Obtém o usuário autenticado com informações básicas
+     * @return Usuario autenticado
+     * @throws AuthenticationException se não autenticado ou usuário não encontrado
+     */
+    public Usuario getAuthenticatedUser() {
+        final String email = getAuthenticatedEmail();
         logger.debug("Buscando usuário autenticado: {}", email);
-
+        
         return usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> {
                     logger.error("Usuário não encontrado no banco: {}", email);
                     return new AuthenticationException(
-                            "Credenciais inválidas",
-                            HttpStatus.FORBIDDEN);
+                            "Credenciais inválidas - usuário não encontrado",
+                            HttpStatus.UNAUTHORIZED);
                 });
     }
 
-    // Novo método otimizado para PostgreSQL
-    public Usuario getUsuarioComRoles() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
+    /**
+     * Obtém o usuário autenticado com seus roles carregados
+     * @return Usuario com roles
+     * @throws AuthenticationException se não autenticado ou usuário não encontrado
+     */
+    public Usuario getAuthenticatedUserWithRoles() {
+        final String email = getAuthenticatedEmail();
+        logger.debug("Buscando usuário autenticado com roles: {}", email);
+        
         return usuarioRepository.findByEmailWithRoles(email)
-                .orElseThrow(() -> new AuthenticationException(
-                        "Usuário não encontrado",
-                        HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> {
+                    logger.error("Usuário com roles não encontrado: {}", email);
+                    return new AuthenticationException(
+                            "Credenciais inválidas - usuário não encontrado",
+                            HttpStatus.UNAUTHORIZED);
+                });
+    }
+
+    /**
+     * Método privado para extrair email do contexto de segurança
+     * @return email do usuário autenticado
+     * @throws AuthenticationException se não autenticado
+     */
+    private String getAuthenticatedEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            logger.warn("Tentativa de acesso sem autenticação válida");
+            throw new AuthenticationException(
+                    "Acesso não autorizado - autenticação requerida",
+                    HttpStatus.UNAUTHORIZED);
+        }
+
+        return authentication.getName();
     }
 }
