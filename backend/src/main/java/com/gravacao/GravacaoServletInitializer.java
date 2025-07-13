@@ -8,6 +8,6 @@ public class GravacaoServletInitializer extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         // Configuração adicional para deploy em container
         setRegisterErrorPageFilter(false); // Desativa filtro de erro padrão
-        return application.sources(GravacaoApplication.class)
+        return application.sources(GravacaoApplication.class);
     }
 }
