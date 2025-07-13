@@ -14,43 +14,35 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    // Verificação de existência por email (case-sensitive)
+    // Verificação de existência
     boolean existsByEmail(String email);
+    boolean existsByCpf(String cpf);
     
-    // Verificação de existência por email (case-insensitive)
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM Usuario u WHERE lower(u.email) = lower(:email)")
     boolean existsByEmailIgnoreCase(@Param("email") String email);
 
-    // Verificação de existência por CPF
-    boolean existsByCpf(String cpf);
-
-    // Busca por ID com roles (EntityGraph)
-    @EntityGraph(attributePaths = "roles")
-    Optional<Usuario> findByIdWithRoles(Long id);
-
-    // Busca por email com roles (EntityGraph)
-    @EntityGraph(attributePaths = "roles")
-    Optional<Usuario> findByEmailWithRoles(String email);
-
-    // Busca por email básica (sem roles)
+    // Buscas básicas
     Optional<Usuario> findByEmail(String email);
-
-    // Busca todos com roles (EntityGraph)
+    
+    // Buscas com roles - VERSÃO CORRIGIDA
     @EntityGraph(attributePaths = "roles")
+    @Query("SELECT DISTINCT u FROM Usuario u LEFT JOIN FETCH u.roles WHERE u.id = :id")
+    Optional<Usuario> findByIdWithRoles(@Param("id") Long id);
+    
+    @EntityGraph(attributePaths = "roles")
+    @Query("SELECT DISTINCT u FROM Usuario u LEFT JOIN FETCH u.roles WHERE u.email = :email")
+    Optional<Usuario> findByEmailWithRoles(@Param("email") String email);
+    
+    @Query("SELECT DISTINCT u FROM Usuario u LEFT JOIN FETCH u.roles")
     List<Usuario> findAllWithRoles();
 
-    // Atualização de último acesso
+    // Operação de atualização
     @Modifying
     @Transactional
     @Query("UPDATE Usuario u SET u.ultimoAcesso = CURRENT_TIMESTAMP WHERE u.id = :id")
     void registrarUltimoAcesso(@Param("id") Long id);
 
-    // Consulta nativa otimizada para PostgreSQL
-    @Query(value = """
-            SELECT u.* FROM usuarios u
-            JOIN usuario_roles ur ON u.id = ur.usuario_id
-            JOIN roles r ON ur.role_id = r.id
-            WHERE lower(u.email) = lower(:email)
-            """, nativeQuery = true)
+    // Consulta nativa
+    @Query(value = "SELECT u.* FROM usuarios u JOIN usuario_roles ur ON u.id = ur.usuario_id WHERE lower(u.email) = lower(:email)", nativeQuery = true)
     Optional<Usuario> findByEmailWithRolesNative(@Param("email") String email);
 }
