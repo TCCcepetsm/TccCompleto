@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.stream.Collectors; // Adicione esta importação se ainda não tiver
+import java.time.LocalDateTime;
 // Adicione esta importação se ainda não tiver
 import java.util.*;
 
@@ -28,6 +29,9 @@ public class Usuario implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_usuario")
 	private Long id;
+
+	@Column(name = "ultimo_acesso")
+	private LocalDateTime ultimoAcesso;
 
 	@NotBlank(message = "Nome é obrigatório")
 	@Size(max = 100, message = "Nome deve ter no máximo 100 caracteres")
