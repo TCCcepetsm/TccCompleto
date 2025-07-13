@@ -1,0 +1,162 @@
+/* CSS */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+header {
+    background-color: #61A5C2;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo img {
+    height: 5rem;
+    width: 15rem;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    /* Empilha as caixas verticalmente */
+    align-items: center;
+    /* Centraliza horizontalmente */
+    gap: 20px;
+    padding: 20px;
+}
+
+h1 {
+    text-decoration-line: underline;
+    font-weight: bold;
+    text-align: center;
+}
+
+.box {
+    width: 80%;
+    /* Largura ajustável */
+    max-width: 400px;
+    /* Largura máxima */
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    border: 2px solid #2c3e50;
+    text-align: center;
+}
+
+.box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.box img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+}
+
+.box h3 {
+    padding: 15px;
+    margin: 0;
+    color: #2c3e50;
+}
+
+/* Estilos adicionais para melhorar a experiência */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.error {
+    text-align: center;
+    padding: 2rem;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    margin: 1rem;
+    color: #721c24;
+}
+
+.error button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.error button:hover {
+    background-color: #c82333;
+}
+
+.no-images {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.1rem;
+    color: #666;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    margin: 1rem;
+}
+
+.image-info {
+    padding: 0 15px 15px 15px;
+}
+
+.image-info p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.event-type {
+    font-weight: bold;
+    color: #2c3e50 !important;
+}
+
+.event-date {
+    font-style: italic;
+}
+
+/* Filtros */
+.filters {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.filter-button {
+    background-color: #61A5C2;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-button:hover {
+    background-color: #4a8ba3;
+}
+
+.filter-button.active {
+    background-color: #2c3e50;
+}
