@@ -1,4 +1,4 @@
-package com.gravacao.backend.dto;
+package com.gravacao.gravacao.dto;
 
 import java.util.List;
 
@@ -6,14 +6,15 @@ public class UploadResponseDTO {
 
     private boolean sucesso;
     private String mensagem;
-    private List<GravacaoDTO> imagensUpload;
+    private List<ImagemDTO> imagensUpload;
     private int totalGravacoesUpload;
 
     // Construtor padrão
-    public UploadResponseDTO() {}
+    public UploadResponseDTO() {
+    }
 
     // Construtor para sucesso
-    public UploadResponseDTO(boolean sucesso, String mensagem, List<GravacaoDTO> imagensUpload) {
+    public UploadResponseDTO(boolean sucesso, String mensagem, List<ImagemDTO> imagensUpload) {
         this.sucesso = sucesso;
         this.mensagem = mensagem;
         this.imagensUpload = imagensUpload;
@@ -44,11 +45,11 @@ public class UploadResponseDTO {
         this.mensagem = mensagem;
     }
 
-    public List<GravacaoDTO> getGravacoesUpload() {
+    public List<ImagemDTO> getGravacoesUpload() {
         return imagensUpload;
     }
 
-    public void setGravacoesUpload(List<GravacaoDTO> imagensUpload) {
+    public void setGravacoesUpload(List<ImagemDTO> imagensUpload) {
         this.imagensUpload = imagensUpload;
         this.totalGravacoesUpload = imagensUpload != null ? imagensUpload.size() : 0;
     }
@@ -70,4 +71,3 @@ public class UploadResponseDTO {
                 '}';
     }
 }
-

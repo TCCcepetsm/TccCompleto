@@ -1,4 +1,4 @@
-package com.gravacao.backend.model;
+package com.gravacao.gravacao.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "imagens")
-public class Gravacao {
+public class Imagem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,12 +48,12 @@ public class Gravacao {
     private String tipoMime;
 
     // Construtor padrão
-    public Gravacao() {
+    public Imagem() {
         this.dataUpload = LocalDateTime.now();
     }
 
     // Construtor com parâmetros
-    public Gravacao(String titulo, String urlGravacao, String tipoEvento, LocalDate dataEvento) {
+    public Imagem(String titulo, String urlGravacao, String tipoEvento, LocalDate dataEvento) {
         this();
         this.titulo = titulo;
         this.urlGravacao = urlGravacao;
@@ -143,7 +143,7 @@ public class Gravacao {
 
     @Override
     public String toString() {
-        return "Gravacao{" +
+        return "Imagem{" +
                 "id=" + id +
                 ", titulo='" + titulo + '\'' +
                 ", urlGravacao='" + urlGravacao + '\'' +
@@ -153,4 +153,3 @@ public class Gravacao {
                 '}';
     }
 }
-

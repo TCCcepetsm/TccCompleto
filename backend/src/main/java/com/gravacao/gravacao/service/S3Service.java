@@ -1,4 +1,4 @@
-package com.gravacao.backend.service;
+package com.gravacao.gravacao.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +29,7 @@ public class S3Service {
     public String uploadFile(MultipartFile file, String tipoEvento) throws IOException {
         // Gera um nome único para o arquivo
         String fileName = generateFileName(file.getOriginalFilename(), tipoEvento);
-        
+
         try {
             // Cria a requisição de upload
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -41,7 +41,7 @@ public class S3Service {
                     .build();
 
             // Faz o upload
-            s3Client.putObject(putObjectRequest, 
+            s3Client.putObject(putObjectRequest,
                     RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
             // Retorna a URL pública do arquivo
@@ -95,11 +95,11 @@ public class S3Service {
         if (originalFileName != null && originalFileName.contains(".")) {
             extension = originalFileName.substring(originalFileName.lastIndexOf("."));
         }
-        
+
         String uuid = UUID.randomUUID().toString();
-        String sanitizedTipoEvento = tipoEvento != null ? 
-                tipoEvento.toLowerCase().replaceAll("[^a-z0-9]", "") : "geral";
-        
+        String sanitizedTipoEvento = tipoEvento != null ? tipoEvento.toLowerCase().replaceAll("[^a-z0-9]", "")
+                : "geral";
+
         return String.format("imagens/%s/%s%s", sanitizedTipoEvento, uuid, extension);
     }
 
@@ -117,9 +117,8 @@ public class S3Service {
         if (url == null || !url.contains(bucketName)) {
             return null;
         }
-        
+
         String baseUrl = String.format("https://%s.s3.%s.amazonaws.com/", bucketName, region);
         return url.replace(baseUrl, "");
     }
 }
-

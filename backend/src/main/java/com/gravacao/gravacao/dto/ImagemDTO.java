@@ -1,4 +1,4 @@
-package com.gravacao.backend.dto;
+package com.gravacao.gravacao.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class GravacaoDTO {
+public class ImagemDTO {
 
     private Long id;
 
@@ -31,19 +31,20 @@ public class GravacaoDTO {
     private String tipoMime;
 
     // Construtor padrão
-    public GravacaoDTO() {}
+    public ImagemDTO() {
+    }
 
     // Construtor com parâmetros principais
-    public GravacaoDTO(String titulo, String tipoEvento, LocalDate dataEvento) {
+    public ImagemDTO(String titulo, String tipoEvento, LocalDate dataEvento) {
         this.titulo = titulo;
         this.tipoEvento = tipoEvento;
         this.dataEvento = dataEvento;
     }
 
     // Construtor completo
-    public GravacaoDTO(Long id, String titulo, String urlGravacao, String tipoEvento, 
-                     LocalDate dataEvento, LocalDateTime dataUpload, String nomeArquivo, 
-                     Long tamanhoArquivo, String tipoMime) {
+    public ImagemDTO(Long id, String titulo, String urlGravacao, String tipoEvento,
+            LocalDate dataEvento, LocalDateTime dataUpload, String nomeArquivo,
+            Long tamanhoArquivo, String tipoMime) {
         this.id = id;
         this.titulo = titulo;
         this.urlGravacao = urlGravacao;
@@ -140,4 +141,3 @@ public class GravacaoDTO {
                 '}';
     }
 }
-

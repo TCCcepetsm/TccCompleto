@@ -1,27 +1,34 @@
-package com.gravacao.backend.controller;
-
-import com.gravacao.backend.dto.GravacaoDTO;
-import com.gravacao.backend.dto.UploadResponseDTO;
-import com.gravacao.backend.service.GravacaoService;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+package com.gravacao.gravacao.controller;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.gravacao.gravacao.dto.ImagemDTO;
+import com.gravacao.gravacao.dto.UploadResponseDTO;
+import com.gravacao.gravacao.service.ImagemService;
+
 @RestController
 @RequestMapping("/imagens")
 @CrossOrigin(origins = "*")
-public class GravacaoController {
+public class ImagemController {
 
     @Autowired
-    private GravacaoService imagemService;
+    private ImagemService imagemService;
 
     /**
      * Endpoint para upload de imagens
@@ -32,7 +39,7 @@ public class GravacaoController {
             @RequestParam("mediaFiles") MultipartFile[] files,
             @RequestParam("eventType") String tipoEvento,
             @RequestParam("eventDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEvento) {
-        
+
         try {
             if (files == null || files.length == 0) {
                 return ResponseEntity.badRequest()
@@ -40,13 +47,13 @@ public class GravacaoController {
             }
 
             UploadResponseDTO response = imagemService.uploadGravacoes(files, tipoEvento, dataEvento);
-            
+
             if (response.isSucesso()) {
                 return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.badRequest().body(response);
             }
-            
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new UploadResponseDTO(false, "Erro interno do servidor: " + e.getMessage()));
@@ -58,9 +65,9 @@ public class GravacaoController {
      * GET /api/imagens
      */
     @GetMapping
-    public ResponseEntity<List<GravacaoDTO>> buscarTodasGravacoes() {
+    public ResponseEntity<List<ImagemDTO>> buscarTodasGravacoes() {
         try {
-            List<GravacaoDTO> imagens = imagemService.buscarTodasGravacoes();
+            List<ImagemDTO> imagens = imagemService.buscarTodasGravacoes();
             return ResponseEntity.ok(imagens);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -72,9 +79,9 @@ public class GravacaoController {
      * GET /api/imagens/tipo/{tipoEvento}
      */
     @GetMapping("/tipo/{tipoEvento}")
-    public ResponseEntity<List<GravacaoDTO>> buscarGravacoesPorTipo(@PathVariable String tipoEvento) {
+    public ResponseEntity<List<ImagemDTO>> buscarGravacoesPorTipo(@PathVariable String tipoEvento) {
         try {
-            List<GravacaoDTO> imagens = imagemService.buscarGravacoesPorTipo(tipoEvento);
+            List<ImagemDTO> imagens = imagemService.buscarGravacoesPorTipo(tipoEvento);
             return ResponseEntity.ok(imagens);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -86,14 +93,14 @@ public class GravacaoController {
      * GET /api/imagens/recentes?limite=10
      */
     @GetMapping("/recentes")
-    public ResponseEntity<List<GravacaoDTO>> buscarGravacoesRecentes(
+    public ResponseEntity<List<ImagemDTO>> buscarGravacoesRecentes(
             @RequestParam(defaultValue = "10") int limite) {
         try {
             if (limite <= 0 || limite > 100) {
                 limite = 10; // Valor padrão seguro
             }
-            
-            List<GravacaoDTO> imagens = imagemService.buscarGravacoesRecentes(limite);
+
+            List<ImagemDTO> imagens = imagemService.buscarGravacoesRecentes(limite);
             return ResponseEntity.ok(imagens);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -105,10 +112,10 @@ public class GravacaoController {
      * GET /api/imagens/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<GravacaoDTO> buscarGravacaoPorId(@PathVariable Long id) {
+    public ResponseEntity<ImagemDTO> buscarGravacaoPorId(@PathVariable Long id) {
         try {
-            Optional<GravacaoDTO> imagem = imagemService.buscarGravacaoPorId(id);
-            
+            Optional<ImagemDTO> imagem = imagemService.buscarGravacaoPorId(id);
+
             if (imagem.isPresent()) {
                 return ResponseEntity.ok(imagem.get());
             } else {
@@ -127,7 +134,7 @@ public class GravacaoController {
     public ResponseEntity<Void> deletarGravacao(@PathVariable Long id) {
         try {
             boolean deletada = imagemService.deletarGravacao(id);
-            
+
             if (deletada) {
                 return ResponseEntity.noContent().build();
             } else {
@@ -147,4 +154,3 @@ public class GravacaoController {
         return ResponseEntity.ok("Serviço de imagens está funcionando!");
     }
 }
-

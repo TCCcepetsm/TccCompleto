@@ -1,9 +1,9 @@
 package com.gravacao.gravacao.service;
 
-import com.gravacao.gravacao.dto.GravacaoDTO;
+import com.gravacao.gravacao.dto.ImagemDTO;
 import com.gravacao.gravacao.dto.UploadResponseDTO;
-import com.gravacao.gravacao.model.Gravacao;
-import com.gravacao.gravacao.repository.GravacaoRepository;
+import com.gravacao.gravacao.model.Imagem;
+import com.gravacao.gravacao.repository.ImagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,10 +15,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class GravacaoService {
+public class ImagemService {
 
     @Autowired
-    private GravacaoRepository imagemRepository;
+    private ImagemRepository imagemRepository;
 
     @Autowired
     private SupabaseStorageService supabaseStorageService;
@@ -27,7 +27,7 @@ public class GravacaoService {
      * Faz upload de múltiplas imagens
      */
     public UploadResponseDTO uploadGravacoes(MultipartFile[] files, String tipoEvento, LocalDate dataEvento) {
-        List<GravacaoDTO> imagensUpload = new ArrayList<>();
+        List<ImagemDTO> imagensUpload = new ArrayList<>();
         List<String> erros = new ArrayList<>();
 
         for (MultipartFile file : files) {
@@ -47,7 +47,7 @@ public class GravacaoService {
                 String urlGravacao = supabaseStorageService.uploadFile(file, tipoEvento);
 
                 // Cria e salva a entidade no banco
-                Gravacao imagem = new Gravacao();
+                Imagem imagem = new Imagem();
                 imagem.setTitulo(generateTitleFromFileName(file.getOriginalFilename()));
                 imagem.setUrlGravacao(urlGravacao);
                 imagem.setTipoEvento(tipoEvento);
@@ -56,7 +56,7 @@ public class GravacaoService {
                 imagem.setTamanhoArquivo(file.getSize());
                 imagem.setTipoMime(file.getContentType());
 
-                Gravacao imagemSalva = imagemRepository.save(imagem);
+                Imagem imagemSalva = imagemRepository.save(imagem);
                 imagensUpload.add(convertToDTO(imagemSalva));
 
             } catch (Exception e) {
@@ -83,7 +83,7 @@ public class GravacaoService {
     /**
      * Faz upload de uma única imagem
      */
-    public GravacaoDTO uploadGravacao(MultipartFile file, String titulo, String tipoEvento) {
+    public ImagemDTO uploadGravacao(MultipartFile file, String titulo, String tipoEvento) {
         try {
             if (file.isEmpty()) {
                 throw new RuntimeException("Arquivo vazio");
@@ -98,9 +98,9 @@ public class GravacaoService {
             String urlGravacao = supabaseStorageService.uploadFile(file, tipoEvento);
 
             // Cria e salva a entidade no banco
-            Gravacao imagem = new Gravacao();
-            imagem.setTitulo(titulo != null && !titulo.trim().isEmpty() ? 
-                titulo : generateTitleFromFileName(file.getOriginalFilename()));
+            Imagem imagem = new Imagem();
+            imagem.setTitulo(titulo != null && !titulo.trim().isEmpty() ? titulo
+                    : generateTitleFromFileName(file.getOriginalFilename()));
             imagem.setUrlGravacao(urlGravacao);
             imagem.setTipoEvento(tipoEvento);
             imagem.setDataEvento(LocalDate.now());
@@ -108,7 +108,7 @@ public class GravacaoService {
             imagem.setTamanhoArquivo(file.getSize());
             imagem.setTipoMime(file.getContentType());
 
-            Gravacao imagemSalva = imagemRepository.save(imagem);
+            Imagem imagemSalva = imagemRepository.save(imagem);
             return convertToDTO(imagemSalva);
 
         } catch (Exception e) {
@@ -119,8 +119,8 @@ public class GravacaoService {
     /**
      * Busca todas as imagens
      */
-    public List<GravacaoDTO> buscarTodasGravacoes() {
-        List<Gravacao> imagens = imagemRepository.findAllByOrderByDataUploadDesc();
+    public List<ImagemDTO> buscarTodasGravacoes() {
+        List<Imagem> imagens = imagemRepository.findAllByOrderByDataUploadDesc();
         return imagens.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -129,8 +129,8 @@ public class GravacaoService {
     /**
      * Busca imagens por tipo de evento
      */
-    public List<GravacaoDTO> buscarGravacoesPorTipo(String tipoEvento) {
-        List<Gravacao> imagens = imagemRepository.findByTipoEventoIgnoreCaseOrderByDataUploadDesc(tipoEvento);
+    public List<ImagemDTO> buscarGravacoesPorTipo(String tipoEvento) {
+        List<Imagem> imagens = imagemRepository.findByTipoEventoIgnoreCaseOrderByDataUploadDesc(tipoEvento);
         return imagens.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -139,8 +139,8 @@ public class GravacaoService {
     /**
      * Busca imagens recentes
      */
-    public List<GravacaoDTO> buscarGravacoesRecentes(int limite) {
-        List<Gravacao> imagens = imagemRepository.findRecentImages(limite);
+    public List<ImagemDTO> buscarGravacoesRecentes(int limite) {
+        List<Imagem> imagens = imagemRepository.findRecentImages(limite);
         return imagens.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -149,8 +149,8 @@ public class GravacaoService {
     /**
      * Busca uma imagem por ID
      */
-    public Optional<GravacaoDTO> buscarGravacaoPorId(Long id) {
-        Optional<Gravacao> imagem = imagemRepository.findById(id);
+    public Optional<ImagemDTO> buscarGravacaoPorId(Long id) {
+        Optional<Imagem> imagem = imagemRepository.findById(id);
         return imagem.map(this::convertToDTO);
     }
 
@@ -158,17 +158,17 @@ public class GravacaoService {
      * Deleta uma imagem
      */
     public boolean deletarGravacao(Long id) {
-        Optional<Gravacao> imagemOpt = imagemRepository.findById(id);
+        Optional<Imagem> imagemOpt = imagemRepository.findById(id);
         if (imagemOpt.isPresent()) {
-            Gravacao imagem = imagemOpt.get();
-            
+            Imagem imagem = imagemOpt.get();
+
             try {
                 // Deleta do Supabase Storage
                 String fileName = supabaseStorageService.extractFileNameFromUrl(imagem.getUrlGravacao());
                 if (fileName != null) {
                     supabaseStorageService.deleteFile(fileName);
                 }
-                
+
                 // Deleta do banco
                 imagemRepository.delete(imagem);
                 return true;
@@ -184,13 +184,11 @@ public class GravacaoService {
      */
     private boolean isValidImageFile(MultipartFile file) {
         String contentType = file.getContentType();
-        return contentType != null && (
-                contentType.equals("image/jpeg") ||
+        return contentType != null && (contentType.equals("image/jpeg") ||
                 contentType.equals("image/jpg") ||
                 contentType.equals("image/png") ||
                 contentType.equals("image/gif") ||
-                contentType.equals("image/webp")
-        );
+                contentType.equals("image/webp"));
     }
 
     /**
@@ -200,11 +198,11 @@ public class GravacaoService {
         if (fileName == null) {
             return "Gravacao sem título";
         }
-        
+
         // Remove a extensão
-        String nameWithoutExtension = fileName.contains(".") ? 
-                fileName.substring(0, fileName.lastIndexOf(".")) : fileName;
-        
+        String nameWithoutExtension = fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf("."))
+                : fileName;
+
         // Substitui underscores e hífens por espaços e capitaliza
         return nameWithoutExtension
                 .replaceAll("[_-]", " ")
@@ -215,8 +213,8 @@ public class GravacaoService {
     /**
      * Converte entidade para DTO
      */
-    private GravacaoDTO convertToDTO(Gravacao imagem) {
-        return new GravacaoDTO(
+    private ImagemDTO convertToDTO(Imagem imagem) {
+        return new ImagemDTO(
                 imagem.getId(),
                 imagem.getTitulo(),
                 imagem.getUrlGravacao(),
@@ -225,8 +223,6 @@ public class GravacaoService {
                 imagem.getDataUpload(),
                 imagem.getNomeArquivo(),
                 imagem.getTamanhoArquivo(),
-                imagem.getTipoMime()
-        );
+                imagem.getTipoMime());
     }
 }
-
