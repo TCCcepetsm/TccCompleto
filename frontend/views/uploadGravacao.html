@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de Galeria | Empresa</title>
+    <link rel="stylesheet" href="../public/css/uploadGravacao.css">
+    <script src="../public/js/config.js"></script>
+    <style>
+        /* Estilos adicionais para melhorar a experiência */
+        .loading-recent {
+            text-align: center;
+            padding: 1rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .error-recent {
+            text-align: center;
+            padding: 1rem;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            color: #721c24;
+        }
+
+        .error-recent button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .error-recent button:hover {
+            background-color: #c82333;
+        }
+
+        .no-recent {
+            text-align: center;
+            padding: 1rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 120px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        /* Melhorias no formulário */
+        .form-group.required label::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Status de conexão */
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            z-index: 1000;
+        }
+
+        .connection-status.online {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .connection-status.offline {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Status de conexão -->
+    <div id="connectionStatus" class="connection-status" style="display: none;"></div>
+
+    <header>
+        <div class="logo">
+            <a href="inicialAdmin.html">
+                <img src="../public/images/logoAdmin.png" alt="Logo da Empresa">
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Upload de Galeria</h1>
+
+        <div class="upload-container">
+            <div class="upload-box">
+                <div class="upload-header">
+                    <h2>Enviar Novos Arquivos</h2>
+                    <p>Selecione fotos e vídeos dos eventos</p>
+                </div>
+
+                <form id="uploadForm" class="upload-form">
+                    <div class="form-group required">
+                        <label for="eventType">Tipo de Evento:</label>
+                        <select id="eventType" name="eventType" required>
+                            <option value="">Selecione...</option>
+                            <option value="futebol">Futebol</option>
+                            <option value="tenis">Tênis</option>
+                            <option value="maratona">Maratona</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group required">
+                        <label for="eventDate">Data do Evento:</label>
+                        <input type="date" id="eventDate" name="eventDate" required>
+                    </div>
+
+                    <div class="form-group file-upload required">
+                        <label for="mediaFiles">Selecione os arquivos:</label>
+                        <input type="file" id="mediaFiles" name="mediaFiles" multiple accept="image/*,video/*" required>
+                        <div class="drop-zone">
+                            <span class="drop-zone__prompt">Arraste arquivos aqui ou clique para selecionar</span>
+                            <span class="drop-zone__info">Formatos aceitos: JPG, PNG, MP4, MOV (máx. 10MB por arquivo)</span>
+                        </div>
+                        <div id="filePreview" class="file-preview"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary"
+                            onclick="window.history.back()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Enviar Arquivos</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="recent-uploads">
+                <h3>Uploads Recentes</h3>
+                <div id="uploadsList" class="uploads-list">
+                    <!-- Itens serão carregados via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="uploadGravacao.js"></script>
+    
+    <script>
+        // Verifica conexão com o backend
+        async function checkConnection() {
+            const statusElement = document.getElementById('connectionStatus');
+            
+            try {
+                const response = await fetch('http://localhost:8080/api/imagens/health');
+                if (response.ok) {
+                    statusElement.textContent = '🟢 Conectado ao servidor';
+                    statusElement.className = 'connection-status online';
+                } else {
+                    throw new Error('Servidor não respondeu');
+                }
+            } catch (error) {
+                statusElement.textContent = '🔴 Servidor offline';
+                statusElement.className = 'connection-status offline';
+            }
+            
+            statusElement.style.display = 'block';
+            
+            // Esconde após 3 segundos se estiver online
+            if (statusElement.classList.contains('online')) {
+                setTimeout(() => {
+                    statusElement.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        // Verifica conexão ao carregar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            checkConnection();
+            
+            // Define data padrão como hoje
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('eventDate').value = today;
+        });
+    </script>
+</body>
+
+</html>
+
