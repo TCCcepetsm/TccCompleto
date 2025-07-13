@@ -17,8 +17,8 @@ public class SupabaseConfig {
     @Value("${supabase.service.role.key}")
     private String supabaseServiceRoleKey;
 
-    @Bean
-    public RestTemplate restTemplate() {
+    @Bean("supabaseRestTemplate") // Nome único para o bean
+    public RestTemplate supabaseRestTemplate() {
         return new RestTemplate();
     }
 

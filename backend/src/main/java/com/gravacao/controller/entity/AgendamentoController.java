@@ -1,8 +1,6 @@
 package com.gravacao.controller.entity;
 
 import com.gravacao.dto.AgendamentoDTO;
-import com.gravacao.exception.AgendamentoNaoEncontradoException;
-import com.gravacao.exception.OperacaoNaoPermitidaException;
 import com.gravacao.repository.AgendamentoRepository;
 import com.gravacao.repository.UsuarioRepository;
 import com.gravacao.service.AgendamentoService;

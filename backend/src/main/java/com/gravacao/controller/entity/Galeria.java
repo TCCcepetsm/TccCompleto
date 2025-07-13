@@ -1,78 +1,154 @@
 package com.gravacao.controller.entity;
 
-import com.gravacao.controller.entity.enuns.TipoMidia;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.AllArgsConstructor; // <--- ADICIONE ESTA LINHA AQUI!
 import jakarta.validation.constraints.Size;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "gravacaos")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor // <--- ADICIONE ESTA LINHA AQUI!
+@Table(name = "imagens")
 public class Galeria {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        @NotBlank(message = "URL da mídia é obrigatória")
-        @Column(name = "midia_url", nullable = false, length = 512)
-        private String midiaUrl;
+        @NotBlank(message = "Título é obrigatório")
+        @Size(max = 255, message = "Título deve ter no máximo 255 caracteres")
+        @Column(name = "titulo", nullable = false)
+        private String titulo;
 
-        @NotNull(message = "Tipo de mídia é obrigatório")
-        @Enumerated(EnumType.STRING)
-        @Column(nullable = false, length = 20)
-        private TipoMidia tipo;
+        @NotBlank(message = "URL da imagem é obrigatória")
+        @Size(max = 2048, message = "URL deve ter no máximo 2048 caracteres")
+        @Column(name = "url_imagem", nullable = false, length = 2048)
+        private String urlGravacao;
 
-        @NotNull(message = "Profissional é obrigatório")
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "profissional_id", nullable = false)
-        private Usuario profissional;
+        @Size(max = 100, message = "Tipo de evento deve ter no máximo 100 caracteres")
+        @Column(name = "tipo_evento")
+        private String tipoEvento;
 
-        @PastOrPresent(message = "Data de postagem deve ser atual ou passada")
-        @Column(name = "data_postagem", nullable = false)
-        private LocalDateTime dataPostagem = LocalDateTime.now();
+        @Column(name = "data_evento")
+        private LocalDate dataEvento;
 
-        @Size(max = 255, message = "Descrição deve ter no máximo 255 caracteres")
-        @Column(length = 255)
-        private String descricao;
+        @Column(name = "data_upload", nullable = false)
+        private LocalDateTime dataUpload;
 
-        @Column(name = "is_publico", nullable = false)
-        private boolean publico = true;
+        @Size(max = 255, message = "Nome do arquivo deve ter no máximo 255 caracteres")
+        @Column(name = "nome_arquivo")
+        private String nomeArquivo;
 
-        // Construtor para campos obrigatórios (mantém este se você o usa explicitamente
-        // em algum lugar)
-        public Galeria(String midiaUrl, TipoMidia tipo, Usuario profissional) {
-                this.midiaUrl = midiaUrl;
-                this.tipo = tipo;
-                this.profissional = profissional;
+        @Column(name = "tamanho_arquivo")
+        private Long tamanhoArquivo;
+
+        @Size(max = 50, message = "Tipo MIME deve ter no máximo 50 caracteres")
+        @Column(name = "tipo_mime")
+        private String tipoMime;
+
+        // Construtor padrão
+        public Galeria() {
+                this.dataUpload = LocalDateTime.now();
         }
 
-        // Método para verificar se é uma imagem
-        public boolean isGravacao() {
-                return tipo == TipoMidia.FOTO;
+        // Construtor com parâmetros
+        public Galeria(String titulo, String urlGravacao, String tipoEvento, LocalDate dataEvento) {
+                this();
+                this.titulo = titulo;
+                this.urlGravacao = urlGravacao;
+                this.tipoEvento = tipoEvento;
+                this.dataEvento = dataEvento;
         }
 
-        // Método para verificar se é um vídeo
-        public boolean isVideo() {
-                return tipo == TipoMidia.VIDEO;
+        // Getters e Setters
+        public Long getId() {
+                return id;
+        }
+
+        public void setId(Long id) {
+                this.id = id;
+        }
+
+        public String getTitulo() {
+                return titulo;
+        }
+
+        public void setTitulo(String titulo) {
+                this.titulo = titulo;
+        }
+
+        public String getUrlGravacao() {
+                return urlGravacao;
+        }
+
+        public void setUrlGravacao(String urlGravacao) {
+                this.urlGravacao = urlGravacao;
+        }
+
+        public String getTipoEvento() {
+                return tipoEvento;
+        }
+
+        public void setTipoEvento(String tipoEvento) {
+                this.tipoEvento = tipoEvento;
+        }
+
+        public LocalDate getDataEvento() {
+                return dataEvento;
+        }
+
+        public void setDataEvento(LocalDate dataEvento) {
+                this.dataEvento = dataEvento;
+        }
+
+        public LocalDateTime getDataUpload() {
+                return dataUpload;
+        }
+
+        public void setDataUpload(LocalDateTime dataUpload) {
+                this.dataUpload = dataUpload;
+        }
+
+        public String getNomeArquivo() {
+                return nomeArquivo;
+        }
+
+        public void setNomeArquivo(String nomeArquivo) {
+                this.nomeArquivo = nomeArquivo;
+        }
+
+        public Long getTamanhoArquivo() {
+                return tamanhoArquivo;
+        }
+
+        public void setTamanhoArquivo(Long tamanhoArquivo) {
+                this.tamanhoArquivo = tamanhoArquivo;
+        }
+
+        public String getTipoMime() {
+                return tipoMime;
+        }
+
+        public void setTipoMime(String tipoMime) {
+                this.tipoMime = tipoMime;
+        }
+
+        @PrePersist
+        protected void onCreate() {
+                if (dataUpload == null) {
+                        dataUpload = LocalDateTime.now();
+                }
         }
 
         @Override
         public String toString() {
-                return "Galeria{" +
+                return "Imagem{" +
                                 "id=" + id +
-                                ", tipo=" + tipo +
-                                ", dataPostagem=" + dataPostagem +
+                                ", titulo='" + titulo + '\'' +
+                                ", urlGravacao='" + urlGravacao + '\'' +
+                                ", tipoEvento='" + tipoEvento + '\'' +
+                                ", dataEvento=" + dataEvento +
+                                ", dataUpload=" + dataUpload +
                                 '}';
         }
 }

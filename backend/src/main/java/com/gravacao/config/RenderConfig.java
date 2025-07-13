@@ -18,20 +18,21 @@ import org.slf4j.LoggerFactory;
 @Profile("prod")
 @EnableScheduling
 public class RenderConfig {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(RenderConfig.class);
-    
+
     @Value("${server.port:8080}")
     private String serverPort;
-    
-    @Bean
-    public RestTemplate restTemplate() {
+
+    @Bean("renderRestTemplate") // Nome único para o bean
+    public RestTemplate renderRestTemplate() {
         return new RestTemplate();
     }
-    
+
     /**
      * Ping automático para evitar que o serviço entre em sleep mode
-     * Executa a cada 14 minutos (Render coloca em sleep após 15 minutos de inatividade)
+     * Executa a cada 14 minutos (Render coloca em sleep após 15 minutos de
+     * inatividade)
      */
     @Scheduled(fixedRate = 840000) // 14 minutos em milissegundos
     public void keepAlive() {
@@ -44,7 +45,7 @@ public class RenderConfig {
             logger.warn("Keep-alive ping failed: {}", e.getMessage());
         }
     }
-    
+
     /**
      * Log de status da aplicação a cada hora
      */
@@ -54,11 +55,10 @@ public class RenderConfig {
         long totalMemory = runtime.totalMemory();
         long freeMemory = runtime.freeMemory();
         long usedMemory = totalMemory - freeMemory;
-        
+
         logger.info("Application Status - Used Memory: {}MB, Free Memory: {}MB, Total Memory: {}MB",
                 usedMemory / 1024 / 1024,
                 freeMemory / 1024 / 1024,
                 totalMemory / 1024 / 1024);
     }
 }
-

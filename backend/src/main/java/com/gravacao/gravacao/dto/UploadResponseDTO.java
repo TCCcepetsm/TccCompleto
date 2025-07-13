@@ -6,7 +6,7 @@ public class UploadResponseDTO {
 
     private boolean sucesso;
     private String mensagem;
-    private List<ImagemDTO> imagensUpload;
+    private List<GaleriaDTO> imagensUpload;
     private int totalGravacoesUpload;
 
     // Construtor padrão
@@ -14,7 +14,7 @@ public class UploadResponseDTO {
     }
 
     // Construtor para sucesso
-    public UploadResponseDTO(boolean sucesso, String mensagem, List<ImagemDTO> imagensUpload) {
+    public UploadResponseDTO(boolean sucesso, String mensagem, List<GaleriaDTO> imagensUpload) {
         this.sucesso = sucesso;
         this.mensagem = mensagem;
         this.imagensUpload = imagensUpload;
@@ -45,11 +45,11 @@ public class UploadResponseDTO {
         this.mensagem = mensagem;
     }
 
-    public List<ImagemDTO> getGravacoesUpload() {
+    public List<GaleriaDTO> getGravacoesUpload() {
         return imagensUpload;
     }
 
-    public void setGravacoesUpload(List<ImagemDTO> imagensUpload) {
+    public void setGravacoesUpload(List<GaleriaDTO> imagensUpload) {
         this.imagensUpload = imagensUpload;
         this.totalGravacoesUpload = imagensUpload != null ? imagensUpload.size() : 0;
     }
