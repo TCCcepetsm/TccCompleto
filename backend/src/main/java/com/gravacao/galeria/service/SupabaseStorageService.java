@@ -1,6 +1,5 @@
-package com.gravacao.gravacao.service;
+package com.gravacao.galeria.service;
 
-import com.gravacao.gravacao.config.SupabaseConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
@@ -10,6 +9,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.gravacao.galeria.config.SupabaseConfig;
 
 import java.io.IOException;
 import java.util.UUID;

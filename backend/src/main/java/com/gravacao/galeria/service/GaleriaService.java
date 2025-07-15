@@ -1,9 +1,10 @@
-package com.gravacao.gravacao.service;
+package com.gravacao.galeria.service;
 
-import com.gravacao.gravacao.dto.GaleriaDTO;
-import com.gravacao.gravacao.dto.UploadResponseDTO;
 import com.gravacao.controller.entity.Galeria;
-import com.gravacao.gravacao.repository.GaleriaRepository;
+import com.gravacao.galeria.dto.GaleriaDTO;
+import com.gravacao.galeria.dto.UploadResponseDTO;
+import com.gravacao.galeria.repository.GaleriaRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

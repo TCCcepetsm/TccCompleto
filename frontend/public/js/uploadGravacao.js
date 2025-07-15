@@ -71,7 +71,7 @@ async function handleUpload(event) {
 
             // Redirecionar para a gravacao após 2 segundos
             setTimeout(() => {
-                window.location.href = '/views/gravacao.html';
+                window.location.href = '/views/galeria.html';
             }, 2000);
 
         } else {
@@ -204,7 +204,7 @@ async function checkConnection() {
     const statusElement = document.getElementById('connectionStatus');
 
     try {
-        const response = await fetch('http://localhost:8080/api/imagens/health');
+        const response = await fetch('http://localhost:8080/api/galeria/health');
         if (response.ok) {
             statusElement.textContent = '🟢 Conectado ao servidor';
             statusElement.className = 'connection-status online';

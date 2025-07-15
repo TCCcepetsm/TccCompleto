@@ -1,4 +1,4 @@
-package com.gravacao.gravacao.repository;
+package com.gravacao.galeria.repository;
 
 import com.gravacao.controller.entity.Galeria;
 import org.springframework.data.jpa.repository.JpaRepository;

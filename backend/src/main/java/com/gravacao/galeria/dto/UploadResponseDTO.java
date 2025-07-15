@@ -1,4 +1,4 @@
-package com.gravacao.gravacao.dto;
+package com.gravacao.galeria.dto;
 
 import java.util.List;
 

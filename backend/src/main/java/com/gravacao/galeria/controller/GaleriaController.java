@@ -1,4 +1,4 @@
-package com.gravacao.gravacao.controller;
+package com.gravacao.galeria.controller;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.gravacao.gravacao.dto.GaleriaDTO;
-import com.gravacao.gravacao.dto.UploadResponseDTO;
-import com.gravacao.gravacao.service.GaleriaService;
+import com.gravacao.galeria.dto.GaleriaDTO;
+import com.gravacao.galeria.dto.UploadResponseDTO;
+import com.gravacao.galeria.service.GaleriaService;
 
 @RestController
-@RequestMapping("/imagens")
+@RequestMapping("/galeria")
 @CrossOrigin(origins = "*")
 public class GaleriaController {
 

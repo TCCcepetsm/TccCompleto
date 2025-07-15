@@ -1,4 +1,4 @@
-package com.gravacao.gravacao.dto;
+package com.gravacao.galeria.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
