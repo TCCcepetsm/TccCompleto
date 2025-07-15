@@ -40,7 +40,7 @@ public interface GaleriaRepository extends JpaRepository<Galeria, Long> {
     /**
      * Busca imagens recentes (últimos N registros)
      */
-    @Query("SELECT i FROM Gravacao i ORDER BY i.dataUpload DESC")
+      @Query(value = "SELECT i FROM Galeria i ORDER BY i.dataUpload DESC LIMIT :limit")
     List<Galeria> findRecentImages(@Param("limit") int limit);
 
     /**
