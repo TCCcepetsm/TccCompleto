@@ -2,6 +2,7 @@ package com.gravacao.gravacao.service;
 
 import com.gravacao.gravacao.config.SupabaseConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class SupabaseStorageService {
     private SupabaseConfig supabaseConfig;
     
     @Autowired
+    @Qualifier("supabaseRestTemplate")
     private RestTemplate restTemplate;
     
     private static final String BUCKET_NAME = "imagens";
