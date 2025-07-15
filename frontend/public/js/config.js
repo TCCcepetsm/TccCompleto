@@ -25,11 +25,11 @@ const API_CONFIG = {
         GALERIA_DELETAR: '/galeria/imagens',
 
         // Agendamentos
-        AGENDAMENTOS_LISTAR: '/agendamentos',
-        AGENDAMENTOS_CRIAR: '/agendamentos',
-        AGENDAMENTOS_ATUALIZAR: '/agendamentos',
-        AGENDAMENTOS_DELETAR: '/agendamentos',
-        AGENDAMENTOS_POR_DATA: '/agendamentos/data',
+        AGENDAMENTOS_LISTAR: '/agendamento',
+        AGENDAMENTOS_CRIAR: '/agendamento',
+        AGENDAMENTOS_ATUALIZAR: '/agendamento',
+        AGENDAMENTOS_DELETAR: '/agendamento',
+        AGENDAMENTOS_POR_DATA: '/agendamento/data',
         AGENDAMENTOS_POR_USUARIO: '/agendamentos/usuario'
     },
 

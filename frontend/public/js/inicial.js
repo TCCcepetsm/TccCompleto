@@ -5,7 +5,7 @@ if (!token) {
 }
 
 // Opcional: Verifica se o token é válido (mesma lógica do login)
-fetch("http://localhost:8080/api/auth/validate-token", {
+fetch("https://gravacao-backend.onrender.com/api/auth/validate-token", {
     headers: { "Authorization": `Bearer ${token}` }
 })
 .then(response => {

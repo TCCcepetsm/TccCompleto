@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Busca os dados da API
-    fetch('http://localhost:3000/agendamento')
+    fetch('https://gravacao-backend.onrender.com/agendamento')
         .then(res => {
             if (!res.ok) {
                 throw new Error('Erro ao carregar dados');
@@ -74,7 +74,7 @@ if (!agendamentoId) {
     alert("ID do agendamento não informado.");
 } else {
     // Buscar os detalhes do agendamento
-    fetch(`http://localhost:8080/api/agendamentos/${agendamentoId}`)
+    fetch(`https://gravacao-backend.onrender.com/api/agendamentos/${agendamentoId}`)
         .then(response => {
             if (!response.ok) throw new Error("Erro ao buscar agendamento");
             return response.json();
@@ -97,7 +97,7 @@ if (!agendamentoId) {
 
 // Função para atualizar status
 function atualizarStatus(status) {
-    fetch(`http://localhost:8080/api/agendamentos/${agendamentoId}/status`, {
+    fetch(`https://gravacao-backend.onrender.com/api/agendamentos/${agendamentoId}/status`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

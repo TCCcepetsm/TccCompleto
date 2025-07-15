@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     if (isAuthenticated()) {
         // Se já está logado, redirecionar para a página principal
-        window.location.href = '/views/agendamento.html';
+        window.location.href = '/views/inicial.html';
         return;
     }
     
@@ -81,7 +81,7 @@ async function handleLogin(event) {
             
             // Redirecionar após 1 segundo
             setTimeout(() => {
-                window.location.href = '/views/agendamento.html';
+                window.location.href = '/views/inicial.html';
             }, 1000);
             
         } else {
